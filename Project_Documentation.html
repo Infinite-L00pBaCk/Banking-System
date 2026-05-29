@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Banking System - Project Documentation</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Fira+Code&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', sans-serif; color: #1a1a2e; line-height: 1.7; padding: 40px 60px; max-width: 900px; margin: auto; }
+  h1 { font-size: 28px; color: #0f3460; border-bottom: 3px solid #0f3460; padding-bottom: 10px; margin: 30px 0 10px; }
+  h2 { font-size: 22px; color: #16213e; margin: 28px 0 12px; border-left: 4px solid #e94560; padding-left: 12px; }
+  h3 { font-size: 17px; color: #0f3460; margin: 18px 0 8px; }
+  p, li { font-size: 14px; margin-bottom: 8px; }
+  ul, ol { padding-left: 24px; }
+  table { width: 100%; border-collapse: collapse; margin: 12px 0 20px; font-size: 13px; }
+  th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: left; }
+  th { background: #0f3460; color: #fff; }
+  tr:nth-child(even) { background: #f0f4ff; }
+  code { font-family: 'Fira Code', monospace; background: #eef; padding: 2px 6px; border-radius: 3px; font-size: 13px; }
+  pre { background: #1a1a2e; color: #e0e0e0; padding: 16px; border-radius: 6px; overflow-x: auto; font-size: 13px; margin: 10px 0 18px; font-family: 'Fira Code', monospace; }
+  .cover { text-align: center; padding: 60px 0 40px; border-bottom: 2px solid #0f3460; margin-bottom: 30px; }
+  .cover h1 { font-size: 36px; border: none; color: #0f3460; }
+  .cover p { font-size: 16px; color: #555; }
+  .badge { display: inline-block; background: #e94560; color: #fff; padding: 3px 10px; border-radius: 12px; font-size: 12px; margin: 2px; }
+  .note { background: #fff3cd; border-left: 4px solid #ffc107; padding: 12px; margin: 12px 0; border-radius: 4px; font-size: 13px; }
+  .diagram { background: #f8f9fa; border: 1px solid #ddd; padding: 20px; border-radius: 8px; margin: 12px 0; font-family: 'Fira Code', monospace; font-size: 13px; white-space: pre; line-height: 1.4; }
+  @media print { body { padding: 20px 40px; } .cover { padding: 40px 0 20px; } }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <h1>Banking System</h1>
+  <p><strong>C++ Console Application</strong></p>
+  <p>Pinnacle Labs Internship Task</p>
+  <p style="margin-top:16px">
+    <strong>Developer:</strong> Priyam Prakash<br>
+    <strong>Language:</strong> C++ (C++11 Standard)<br>
+    <strong>Date:</strong> May 2026
+  </p>
+  <p style="margin-top:12px">
+    <span class="badge">OOP</span>
+    <span class="badge">File I/O</span>
+    <span class="badge">Data Structures</span>
+    <span class="badge">Serialization</span>
+    <span class="badge">Encapsulation</span>
+  </p>
+</div>
+
+<!-- ============================================================ -->
+<h1>1. Project Overview</h1>
+<p>This project is a <strong>C++-based Banking Management System</strong> that simulates real-world banking operations through a console interface. It allows users to create accounts, manage balances, perform deposits/withdrawals/transfers, and view complete transaction history.</p>
+<p>All data is <strong>persisted to files</strong>, meaning accounts and transactions survive between program restarts.</p>
+
+<h2>1.1 Features Implemented</h2>
+<table>
+  <tr><th>#</th><th>Feature</th><th>Description</th></tr>
+  <tr><td>1</td><td>Create Account</td><td>Register with name, 4-digit PIN, minimum Rs. 500 deposit</td></tr>
+  <tr><td>2</td><td>View Account</td><td>Display account details after PIN verification</td></tr>
+  <tr><td>3</td><td>Deposit</td><td>Add funds to any active account</td></tr>
+  <tr><td>4</td><td>Withdraw</td><td>Remove funds with balance check and PIN auth</td></tr>
+  <tr><td>5</td><td>Transfer</td><td>Move money between two accounts</td></tr>
+  <tr><td>6</td><td>Balance Enquiry</td><td>Quick balance check with PIN</td></tr>
+  <tr><td>7</td><td>Transaction History</td><td>Full audit trail per account</td></tr>
+  <tr><td>8</td><td>List All Accounts</td><td>Tabular overview of all accounts</td></tr>
+  <tr><td>9</td><td>Close Account</td><td>Deactivate account, return balance</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h1>2. Architecture & File Structure</h1>
+
+<div class="diagram">
+                    +------------------+
+                    |    main.cpp      |  Entry point, menu loop
+                    +--------+---------+
+                             |
+                    +--------v---------+
+                    |    Bank          |  Manager / Orchestrator
+                    |  (Bank.h/.cpp)   |  Controls all operations
+                    +---+---------+----+
+                        |         |
+          +-------------+    +----+-----------+
+          |                  |                |
++---------v------+  +--------v-----+  +------v----------+
+| BankAccount    |  | Transaction  |  | FileManager     |
+| (.h/.cpp)      |  | (.h/.cpp)    |  | (.h/.cpp)       |
+| Account data   |  | Txn records  |  | File read/write |
++----------------+  +--------------+  +------+----------+
+                                              |
+                                    +---------+----------+
+                                    |                    |
+                              accounts.dat      transactions.dat
+</div>
+
+<h2>2.1 File Descriptions</h2>
+<table>
+  <tr><th>File</th><th>Role</th></tr>
+  <tr><td><code>main.cpp</code></td><td>Program entry point. Displays the banner, runs the menu loop, routes user choices to Bank methods.</td></tr>
+  <tr><td><code>Bank.h / Bank.cpp</code></td><td>Central manager class. Orchestrates account creation, deposits, withdrawals, transfers, and history display.</td></tr>
+  <tr><td><code>BankAccount.h / BankAccount.cpp</code></td><td>Represents a single bank account with balance, PIN, and status. Handles deposit/withdraw logic.</td></tr>
+  <tr><td><code>Transaction.h / Transaction.cpp</code></td><td>Represents a single transaction record with type, amount, timestamp, and description.</td></tr>
+  <tr><td><code>FileManager.h / FileManager.cpp</code></td><td>Handles all file read/write operations. Saves/loads accounts and transactions to/from <code>.dat</code> files.</td></tr>
+  <tr><td><code>accounts.dat</code></td><td>Auto-generated data file storing all account records (pipe-delimited).</td></tr>
+  <tr><td><code>transactions.dat</code></td><td>Auto-generated data file storing all transaction records (pipe-delimited).</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h1>3. OOP Concepts Used</h1>
+
+<h2>3.1 Encapsulation</h2>
+<p>All class data members are <code>private</code>. Access is provided through public getter methods and controlled operations.</p>
+<pre>class BankAccount {
+private:
+    std::string accountNumber;  // Cannot be accessed directly
+    std::string pin;            // Hidden from outside
+    double balance;             // Modified only via deposit()/withdraw()
+public:
+    double getBalance() const;  // Controlled read access
+    bool deposit(double amount);  // Controlled write access
+};</pre>
+<p><strong>Why?</strong> Prevents external code from setting invalid balances or bypassing PIN checks.</p>
+
+<h2>3.2 Abstraction</h2>
+<p>The <code>Bank</code> class hides the complexity of file I/O, account lookup, and transaction logging. The <code>main.cpp</code> simply calls <code>bank.deposit()</code> without knowing the internal details.</p>
+
+<h2>3.3 Modularity (Separation of Concerns)</h2>
+<table>
+  <tr><th>Class</th><th>Responsibility</th></tr>
+  <tr><td>BankAccount</td><td>Manages one account's data and operations</td></tr>
+  <tr><td>Transaction</td><td>Represents and formats one transaction record</td></tr>
+  <tr><td>FileManager</td><td>Handles all file read/write (persistence layer)</td></tr>
+  <tr><td>Bank</td><td>Orchestrates everything (business logic layer)</td></tr>
+  <tr><td>main.cpp</td><td>User interface layer (menu and input)</td></tr>
+</table>
+
+<h2>3.4 Enum Class</h2>
+<pre>enum class TransactionType {
+    DEPOSIT, WITHDRAWAL, TRANSFER_IN, TRANSFER_OUT, ACCOUNT_CREATION
+};</pre>
+<p>Scoped enum (<code>enum class</code>) is used instead of plain <code>enum</code> for type safety — prevents accidental integer comparisons.</p>
+
+<!-- ============================================================ -->
+<h1>4. Core Logic Explained</h1>
+
+<h2>4.1 Account Creation Flow</h2>
+<ol>
+  <li>User enters full name</li>
+  <li>User sets a 4-digit PIN (validated: must be exactly 4 digits)</li>
+  <li>User confirms PIN (must match)</li>
+  <li>User enters initial deposit (minimum Rs. 500)</li>
+  <li>System generates unique account number (e.g., <code>PNB-1001</code>)</li>
+  <li>Account is stored in <code>vector&lt;BankAccount&gt;</code></li>
+  <li>Creation transaction is logged to <code>transactions.dat</code></li>
+  <li>All accounts are saved to <code>accounts.dat</code></li>
+</ol>
+
+<h2>4.2 Deposit Logic</h2>
+<pre>bool BankAccount::deposit(double amount) {
+    if (amount <= 0) → reject (must be positive)
+    if (!active)     → reject (account closed)
+    balance += amount;
+    return true;
+}</pre>
+<p>After a successful deposit, the <code>Bank</code> class creates a <code>Transaction</code> record and appends it to the file.</p>
+
+<h2>4.3 Withdrawal Logic</h2>
+<pre>bool BankAccount::withdraw(double amount) {
+    if (amount <= 0)      → reject
+    if (!active)          → reject
+    if (amount > balance) → reject ("Insufficient balance!")
+    balance -= amount;
+    return true;
+}</pre>
+<p>Key protection: <strong>You cannot withdraw more than the available balance.</strong></p>
+
+<h2>4.4 Transfer Logic</h2>
+<ol>
+  <li>Verify sender account exists and is active</li>
+  <li>Verify sender PIN</li>
+  <li>Verify recipient account exists and is active</li>
+  <li>Check sender != recipient</li>
+  <li>Call <code>sender.withdraw(amount)</code></li>
+  <li>Call <code>recipient.deposit(amount)</code></li>
+  <li>Log TWO transactions: <code>TRANSFER_OUT</code> for sender, <code>TRANSFER_IN</code> for recipient</li>
+</ol>
+
+<h2>4.5 Account Number Generation</h2>
+<pre>std::string Bank::generateAccountNumber() {
+    return "PNB-" + std::to_string(nextAccountId++);
+    // PNB-1001, PNB-1002, PNB-1003, ...
+}</pre>
+<p>On startup, the system scans existing accounts to find the highest ID and continues from there.</p>
+
+<!-- ============================================================ -->
+<h1>5. Data Persistence (File I/O)</h1>
+
+<h2>5.1 Serialization Format</h2>
+<p>Data is stored as <strong>pipe-delimited (|)</strong> text in <code>.dat</code> files.</p>
+
+<h3>accounts.dat format:</h3>
+<pre>PNB-1001|Priyam Prakash|1234|5000.00|1|2026-05-07 19:08:00</pre>
+<p>Fields: AccountNo | Name | PIN | Balance | Active(1/0) | CreationDate</p>
+
+<h3>transactions.dat format:</h3>
+<pre>PNB-1001|DEPOSIT|2000.00|7000.00|2026-05-07 19:10:00|Cash deposit</pre>
+<p>Fields: AccountNo | Type | Amount | BalanceAfter | Timestamp | Description</p>
+
+<h2>5.2 Why Pipe-Delimited?</h2>
+<ul>
+  <li>Simple to parse with <code>std::getline(stream, field, '|')</code></li>
+  <li>Human-readable (you can open <code>.dat</code> files in Notepad)</li>
+  <li>No external library needed (no JSON/XML parsers required)</li>
+</ul>
+
+<h2>5.3 File Operations</h2>
+<table>
+  <tr><th>Operation</th><th>Method</th><th>Mode</th></tr>
+  <tr><td>Save all accounts</td><td><code>saveAccounts()</code></td><td><code>ios::trunc</code> (overwrite)</td></tr>
+  <tr><td>Load all accounts</td><td><code>loadAccounts()</code></td><td>Read line by line</td></tr>
+  <tr><td>Log a transaction</td><td><code>appendTransaction()</code></td><td><code>ios::app</code> (append)</td></tr>
+  <tr><td>Load transactions</td><td><code>loadTransactions()</code></td><td>Read line by line</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h1>6. Error Handling & Validations</h1>
+
+<table>
+  <tr><th>Scenario</th><th>How It's Handled</th></tr>
+  <tr><td>Invalid menu input (letters)</td><td><code>cin.fail()</code> check + <code>cin.clear()</code> to reset stream</td></tr>
+  <tr><td>Empty name</td><td>Rejected with error message</td></tr>
+  <tr><td>PIN not 4 digits</td><td>Loop until valid PIN entered</td></tr>
+  <tr><td>PIN mismatch on confirm</td><td>Loop until both match</td></tr>
+  <tr><td>Deposit below Rs. 500</td><td>Rejected with minimum amount message</td></tr>
+  <tr><td>Negative deposit/withdrawal</td><td>Rejected ("must be positive")</td></tr>
+  <tr><td>Withdraw more than balance</td><td>Rejected with available balance shown</td></tr>
+  <tr><td>Account not found</td><td>Error message returned</td></tr>
+  <tr><td>Wrong PIN</td><td>"Access denied" message</td></tr>
+  <tr><td>Operation on closed account</td><td>Rejected with appropriate message</td></tr>
+  <tr><td>Transfer to same account</td><td>Rejected</td></tr>
+  <tr><td>File doesn't exist (first run)</td><td>Gracefully returns empty vector</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h1>7. Key C++ Concepts Used</h1>
+
+<table>
+  <tr><th>Concept</th><th>Where Used</th></tr>
+  <tr><td>Classes & Objects</td><td>BankAccount, Transaction, Bank, FileManager</td></tr>
+  <tr><td>Constructors (default + parameterized)</td><td>All classes</td></tr>
+  <tr><td>Enum class</td><td>TransactionType</td></tr>
+  <tr><td>Vectors (<code>std::vector</code>)</td><td>Storing accounts and transactions dynamically</td></tr>
+  <tr><td>String streams (<code>std::ostringstream</code>)</td><td>Serialization and formatting</td></tr>
+  <tr><td>File streams (<code>ifstream/ofstream</code>)</td><td>Reading/writing .dat files</td></tr>
+  <tr><td>Static methods</td><td><code>Transaction::getCurrentTimestamp()</code>, deserialize methods</td></tr>
+  <tr><td>Const correctness</td><td>Getter methods marked <code>const</code></td></tr>
+  <tr><td><code>std::setw</code>, <code>std::setprecision</code></td><td>Formatted table output</td></tr>
+  <tr><td>Header guards (<code>#ifndef</code>)</td><td>All .h files to prevent double-inclusion</td></tr>
+  <tr><td><code>std::getline</code></td><td>Reading full names with spaces, parsing pipe-delimited data</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h1>8. How to Compile & Run</h1>
+
+<h2>8.1 Using g++ (MinGW)</h2>
+<pre>g++ -std=c++11 -o banking_system.exe main.cpp BankAccount.cpp Bank.cpp Transaction.cpp FileManager.cpp
+banking_system.exe</pre>
+
+<h2>8.2 Using Visual Studio Developer Prompt</h2>
+<pre>cl /EHsc /std:c++17 main.cpp BankAccount.cpp Bank.cpp Transaction.cpp FileManager.cpp /Fe:banking_system.exe
+banking_system.exe</pre>
+
+<!-- ============================================================ -->
+<h1>9. Program Flow Diagram</h1>
+
+<div class="diagram">
+  Program Start
+       |
+  Load accounts from accounts.dat
+  Load transactions from transactions.dat
+       |
+  Display Banner
+       |
+  +---> Display Menu
+  |         |
+  |    User enters choice (0-9)
+  |         |
+  |    +----+----+----+----+----+----+----+----+----+
+  |    1    2    3    4    5    6    7    8    9    0
+  |    |    |    |    |    |    |    |    |    |    |
+  |  Create View Dep. With. Trans Check Hist List Close Exit
+  |  Acct  Acct       draw  fer  Bal.             Acct   |
+  |    |    |    |    |    |    |    |    |    |    |
+  |    +----+----+----+----+----+----+----+----+    |
+  |         |                                       |
+  |    Save to files                           Goodbye!
+  |         |                                    END
+  +----<----+
+</div>
+
+<!-- ============================================================ -->
+<h1>10. Future Enhancements (Optional)</h1>
+<ul>
+  <li>Password hashing instead of storing plain PINs</li>
+  <li>Database integration (SQLite) instead of flat files</li>
+  <li>Interest calculation on savings accounts</li>
+  <li>Multiple account types (Savings, Current)</li>
+  <li>Admin login with different privileges</li>
+  <li>Loan management module</li>
+</ul>
+
+<div class="note">
+  <strong>Note:</strong> This project was developed as part of the Pinnacle Labs Internship Task. 
+  It demonstrates proficiency in C++ programming, Object-Oriented Design, File I/O, and building 
+  complete console applications.
+</div>
+
+<hr style="margin-top:40px">
+<p style="text-align:center; color:#888; font-size:12px; margin-top:20px">
+  Banking System v1.0 | Developed by Priyam Prakash | Pinnacle Labs Internship | May 2026
+</p>
+
+</body>
+</html>
