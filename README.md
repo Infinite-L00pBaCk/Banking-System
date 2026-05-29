@@ -1,19 +1,5 @@
 <div align="center">
 
-<!-- Visitor Counter -->
-![Visitor Count](https://profile-counter.glitch.me/Infinite-L00pBaCk-Banking-System/count.svg)
-
-<br/>
-
-```
-██████╗  █████╗ ███╗   ██╗██╗  ██╗    ██████╗ ██████╗  ██████╗
-██╔══██╗██╔══██╗████╗  ██║██║ ██╔╝    ██╔══██╗██╔══██╗██╔═══██╗
-██████╔╝███████║██╔██╗ ██║█████╔╝     ██████╔╝██████╔╝██║   ██║
-██╔══██╗██╔══██║██║╚██╗██║██╔═██╗     ██╔═══╝ ██╔══██╗██║   ██║
-██████╔╝██║  ██║██║ ╚████║██║  ██╗    ██║     ██║  ██║╚██████╔╝
-╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝   ╚═╝     ╚═╝  ╚═╝ ╚═════╝
-```
-
 # 🏦 Banking Management System
 
 **A fully-featured C++ console banking application with persistent storage, PIN authentication & complete transaction history.**
@@ -25,6 +11,10 @@
 [![Status](https://img.shields.io/badge/Status-Complete-brightgreen?style=for-the-badge&logo=checkmarx&logoColor=white)](https://github.com/Infinite-L00pBaCk/Banking-System)
 [![License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge&logo=open-source-initiative&logoColor=white)](./LICENSE)
 [![Internship](https://img.shields.io/badge/Pinnacle%20Labs-Internship%20Task-blueviolet?style=for-the-badge&logo=briefcase&logoColor=white)](https://github.com/Infinite-L00pBaCk/Banking-System)
+
+<br/>
+
+![Visitor Count](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FInfinite-L00pBaCk%2FBanking-System&count_bg=%2300599C&title_bg=%23555555&icon=github.svg&icon_color=%23FFFFFF&title=Visitors&edge_flat=false)
 
 </div>
 
@@ -91,13 +81,13 @@ main.cpp  ──────────────────►  Bank (Orche
 
 ```
 ┌─────────────────────────────────────────────────────┐
-│                  UI Layer (main.cpp)                 │  ← Menu, input, display
+│                  UI Layer (main.cpp)                 │  <- Menu, input, display
 ├─────────────────────────────────────────────────────┤
-│             Business Logic Layer (Bank)              │  ← Validation, coordination
+│             Business Logic Layer (Bank)              │  <- Validation, coordination
 ├──────────────┬──────────────────┬───────────────────┤
-│ BankAccount  │   Transaction    │   FileManager      │  ← Domain objects + I/O
+│ BankAccount  │   Transaction    │   FileManager      │  <- Domain objects + I/O
 ├──────────────┴──────────────────┴───────────────────┤
-│          Persistence Layer (accounts.dat /.dat)      │  ← Flat-file storage
+│          Persistence Layer (accounts.dat / .dat)     │  <- Flat-file storage
 └─────────────────────────────────────────────────────┘
 ```
 
@@ -107,6 +97,7 @@ main.cpp  ──────────────────►  Bank (Orche
 
 <details>
 <summary><b>🔒 Encapsulation</b></summary>
+<br/>
 
 All data members are `private`. Balance, PIN, and active status are only accessible through validated public methods — you can never set a negative balance or bypass PIN checks from outside the class.
 
@@ -114,6 +105,7 @@ All data members are `private`. Balance, PIN, and active status are only accessi
 
 <details>
 <summary><b>🎭 Abstraction</b></summary>
+<br/>
 
 `main.cpp` calls `bank.deposit()` — it has no idea about file I/O, account lookup, or transaction logging. The entire persistence layer is invisible to the UI.
 
@@ -121,6 +113,7 @@ All data members are `private`. Balance, PIN, and active status are only accessi
 
 <details>
 <summary><b>🧩 Separation of Concerns</b></summary>
+<br/>
 
 | Class | Knows about |
 |-------|-------------|
@@ -134,6 +127,7 @@ All data members are `private`. Balance, PIN, and active status are only accessi
 
 <details>
 <summary><b>🏷️ Type-Safe Enumerations</b></summary>
+<br/>
 
 ```cpp
 enum class TransactionType {
@@ -222,20 +216,20 @@ A pre-compiled `banking_system.exe` is included — just double-click or run it 
 ## 🖥️ Usage Guide
 
 ```
-╔══════════════════════════════════════════╗
-║              MAIN MENU                   ║
-╠══════════════════════════════════════════╣
-║   [1]  Create New Account                ║
-║   [2]  View Account Details              ║
-║   [3]  Deposit Funds                     ║
-║   [4]  Withdraw Funds                    ║
-║   [5]  Transfer Funds                    ║
-║   [6]  Check Balance                     ║
-║   [7]  Transaction History               ║
-║   [8]  List All Accounts                 ║
-║   [9]  Close Account                     ║
-║   [0]  Exit                              ║
-╚══════════════════════════════════════════╝
++------------------------------------------+
+|              MAIN MENU                   |
++------------------------------------------+
+|   [1]  Create New Account                |
+|   [2]  View Account Details              |
+|   [3]  Deposit Funds                     |
+|   [4]  Withdraw Funds                    |
+|   [5]  Transfer Funds                    |
+|   [6]  Check Balance                     |
+|   [7]  Transaction History               |
+|   [8]  List All Accounts                 |
+|   [9]  Close Account                     |
+|   [0]  Exit                              |
++------------------------------------------+
 ```
 
 **Creating your first account:**
