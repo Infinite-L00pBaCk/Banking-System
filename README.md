@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🏦 Banking Management System
+# 🏦 Banking Management System:-
 
 **A fully-featured C++ console banking application with persistent storage, PIN authentication & complete transaction history.**
 
