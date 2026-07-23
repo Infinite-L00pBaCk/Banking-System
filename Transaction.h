@@ -11,45 +11,86 @@
 #include <sstream>
 #include <iomanip>
 
+/**
+ * @enum TransactionType
+ * @brief Categorizes the different types of banking transactions.
+ */
 enum class TransactionType {
-    DEPOSIT,
-    WITHDRAWAL,
-    TRANSFER_IN,
-    TRANSFER_OUT,
-    ACCOUNT_CREATION
+    DEPOSIT,          ///< Money added to the account
+    WITHDRAWAL,       ///< Money taken out of the account
+    TRANSFER_IN,      ///< Money received from another account
+    TRANSFER_OUT,     ///< Money sent to another account
+    ACCOUNT_CREATION  ///< Initial deposit during account setup
 };
 
+/**
+ * @struct Transaction
+ * @brief Represents a single financial transaction.
+ *
+ * Stores all relevant details for an audit trail including type,
+ * amount, timestamps, and the resulting balance.
+ */
 struct Transaction {
-    std::string accountNumber;
-    TransactionType type;
-    double amount;
-    double balanceAfter;
-    std::string timestamp;
-    std::string description;
+    std::string accountNumber;  ///< Account associated with this transaction
+    TransactionType type;       ///< Type of transaction performed
+    double amount;              ///< Monetary amount involved
+    double balanceAfter;        ///< Account balance after the transaction
+    std::string timestamp;      ///< Exact time the transaction occurred
+    std::string description;    ///< Human-readable context or note
 
-    // Default constructor
+    /**
+     * @brief Default constructor for Transaction.
+     */
     Transaction();
 
-    // Parameterized constructor
+    /**
+     * @brief Parameterized constructor.
+     * @param accNo The account number.
+     * @param t The transaction type.
+     * @param amt The transaction amount.
+     * @param balAfter Balance remaining after this transaction.
+     * @param desc A short description or note.
+     */
     Transaction(const std::string& accNo, TransactionType t, double amt,
                 double balAfter, const std::string& desc);
 
-    // Get current timestamp as string
+    /**
+     * @brief Generates the current timestamp.
+     * @return Formatted timestamp string (YYYY-MM-DD HH:MM:SS).
+     */
     static std::string getCurrentTimestamp();
 
-    // Convert TransactionType to readable string
+    /**
+     * @brief Converts a TransactionType enum to a string.
+     * @param t The transaction type.
+     * @return String representation of the type.
+     */
     static std::string typeToString(TransactionType t);
 
-    // Convert string back to TransactionType
+    /**
+     * @brief Parses a string into a TransactionType enum.
+     * @param s The string representation.
+     * @return The corresponding TransactionType enum.
+     */
     static TransactionType stringToType(const std::string& s);
 
-    // Serialize to a single line for file storage
+    /**
+     * @brief Serializes the transaction to a pipe-delimited string.
+     * @return Serialized string for file storage.
+     */
     std::string serialize() const;
 
-    // Deserialize from a stored line
+    /**
+     * @brief Deserializes a pipe-delimited string into a Transaction.
+     * @param line The string to deserialize.
+     * @return A populated Transaction object.
+     */
     static Transaction deserialize(const std::string& line);
 
-    // Display-friendly format
+    /**
+     * @brief Formats the transaction for console display.
+     * @return A formatted, human-readable string.
+     */
     std::string display() const;
 };
 
